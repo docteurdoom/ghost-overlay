@@ -83,7 +83,7 @@ src_install() {
 #	fi
 
 #	insinto /usr/share/icons/hicolor/scalable/apps/
-#	doins bitcoin128.svg
+#	doins particl.png
 
 #	cp "${FILESDIR}/org.bitcoin.bitcoin-qt.desktop" "${T}" || die
 

@@ -21,7 +21,7 @@ RDEPEND="
 	>=dev-libs/univalue-1.0.4:=
 	dev-libs/libevent:=
 "
-#>dev-libs/libsecp256k1-0.1_pre20200911:=[recovery,schnorr]
+
 DEPEND="${RDEPEND}"
 BDEPEND="
 	>=sys-devel/automake-1.13

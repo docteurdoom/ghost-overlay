@@ -71,8 +71,6 @@ pkg_postinst() {
 	xdg_icon_cache_update
 	xdg_desktop_database_update
 	elog "Run ${PN} with 'electrum' command."
-	elog "To get ${PN} running on Musl-based systems,"
-	elog "make sure to set LC_ALL=\"C\" environment variable."
 }
 
 pkg_postrm() {
