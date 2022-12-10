@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person" proxied="no">
+		<email>Doctor Doom</email>
+		<name>docteurdoom@bitmessage.de</name>
+	</maintainer>
+	<use>
+		<flag name="asm">Enable assembly for optimization</flag>
+		<flag name="hardened">Compile hardened executables</flag>
+		<flag name="test">Enable tests</flag>
+		<flag name="qrcode">Enable generation of QR Codes for receiving payments</flag>
+		<flag name="upnp">Enable Universal Plug and Play</flag>
+		<flag name="wallet">Enable wallet support</flag>
+		<flag name="zeromq">Report blocks and transactions via zeromq</flag>
+	</use>
+	<upstream>
+		<remote-id type="github">ghost-coin/ghost-core</remote-id>
+	</upstream>
+</pkgmetadata>
