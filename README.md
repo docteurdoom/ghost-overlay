@@ -1,5 +1,5 @@
 # ghost-overlay
-### Gentoo overlay for Ghost Coin
+### Gentoo overlay for [Ghost Coin](https://github.com/ghost-coin)
 
 Prerequisites:
 	
