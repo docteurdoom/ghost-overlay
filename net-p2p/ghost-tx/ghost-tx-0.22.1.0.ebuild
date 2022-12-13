@@ -59,22 +59,6 @@ src_configure() {
 
 src_install() {
 	default
-#	newbashcomp contrib/bitcoind.bash-completion ${PN}
-#	if use test; then
-#		rm -f "${ED}/usr/bin/test_bitcoin" || die
-#	fi
-
-#	insinto /usr/share/icons/hicolor/scalable/apps/
-#	doins bitcoin128.svg
-
-#	cp "${FILESDIR}/org.bitcoin.bitcoin-qt.desktop" "${T}" || die
-
-#	domenu "${T}/org.bitcoin.bitcoin-qt.desktop"
-
-#	use zeromq && dodoc doc/zmq.md
-
-	
-
 }
 
 pkg_postinst() {

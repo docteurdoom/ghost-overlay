@@ -58,11 +58,6 @@ src_configure() {
 
 src_install() {
 	default
-
-#	if use test; then
-#		rm -f "${ED}/usr/bin/test_bitcoin" || die
-#	fi
-
 }
 
 pkg_postinst() {

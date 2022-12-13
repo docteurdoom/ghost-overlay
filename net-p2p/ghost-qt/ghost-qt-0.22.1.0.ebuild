@@ -77,22 +77,6 @@ src_configure() {
 
 src_install() {
 	default
-
-#	if use test; then
-#		rm -f "${ED}/usr/bin/test_bitcoin" || die
-#	fi
-
-#	insinto /usr/share/icons/hicolor/scalable/apps/
-#	doins particl.png
-
-#	cp "${FILESDIR}/org.bitcoin.bitcoin-qt.desktop" "${T}" || die
-
-#	domenu "${T}/org.bitcoin.bitcoin-qt.desktop"
-}
-
-update_caches() {
-	xdg_icon_cache_update
-	xdg_desktop_database_update
 }
 
 pkg_postinst() {
