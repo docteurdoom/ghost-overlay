@@ -5,7 +5,6 @@ EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{9..10} )
-PYTHON_REQ_USE="ncurses?"
 
 inherit distutils-r1 xdg-utils
 
@@ -16,8 +15,7 @@ SRC_URI="https://github.com/ghost-coin/ghost-electrum/archive/refs/tags/${PV}.ta
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 x86"
-IUSE="cli ncurses qrcode test"
-REQUIRED_USE="|| ( cli ncurses )"
+IUSE="qrcode test"
 
 RDEPEND="
 	${PYTHON_DEPS}
@@ -37,7 +35,6 @@ RDEPEND="
 	dev-python/PyQt5[gui,widgets,${PYTHON_USEDEP}]
 	>=dev-python/protobuf-python-3.12[${PYTHON_USEDEP}]
 	qrcode? ( media-gfx/zbar[v4l] )
-	ncurses? ( $(python_gen_impl_dep 'ncurses') )
 "
 BDEPEND="
 	test? (
@@ -49,13 +46,6 @@ S="${WORKDIR}/ghost-electrum-${PV}"
 distutils_enable_tests pytest
 
 src_prepare() {
-	# use backwards-compatible cryptodome API
-	sed -i -e 's:Cryptodome:Crypto:' electrum/crypto.py || die
-
-	# make qdarkstyle dep optional
-	sed -i -e '/qdarkstyle/d' contrib/requirements/requirements.txt || die
-	bestgui=qt
-
 	eapply_user
 
 	xdg_environment_reset
