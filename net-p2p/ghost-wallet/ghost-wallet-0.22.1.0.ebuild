@@ -4,7 +4,7 @@
 EAPI=7
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use desktop flag-o-matic xdg-utils
+inherit autotools db-use
 
 DESCRIPTION="Wallet utility for Ghost by John McAfee privacy coin"
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
@@ -18,10 +18,10 @@ IUSE="+asm +hardened test"
 
 RDEPEND="
 	dev-libs/boost:=
-	>=dev-libs/univalue-1.0.4:=
 	dev-libs/libevent:=
+	sys-libs/db:$(db_ver_to_slot "${DB_VER}")=[cxx]
 "
-#>dev-libs/libsecp256k1-0.1_pre20200911:=[recovery,schnorr]
+
 DEPEND="${RDEPEND}"
 BDEPEND="
 	>=sys-devel/automake-1.13

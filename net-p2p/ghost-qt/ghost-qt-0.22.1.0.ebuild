@@ -4,7 +4,7 @@
 EAPI=7
 
 DB_VER="4.8"
-inherit autotools bash-completion-r1 db-use desktop flag-o-matic xdg-utils
+inherit autotools db-use desktop xdg-utils
 
 DESCRIPTION="Qt GUI for Ghost by John McAfee privacy coin"
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
