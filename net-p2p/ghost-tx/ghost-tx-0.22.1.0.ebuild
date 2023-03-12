@@ -11,7 +11,7 @@ SRC_URI="https://github.com/ghost-coin/ghost-core/archive/refs/tags/v${PV}.tar.g
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm arm64 aarch64 ~ppc ~ppc64 x86 amd64-linux x86-linux"
+KEYWORDS="amd64 arm arm64 ~ppc ~ppc64 x86 amd64-linux x86-linux"
 
 IUSE="+asm +hardened test"
 
@@ -25,6 +25,8 @@ BDEPEND="
 	>=sys-devel/automake-1.13
 	|| ( >=sys-devel/gcc-7[cxx] >=sys-devel/clang-5 )
 "
+
+RESTRICT="!test? ( test )"
 
 S="${WORKDIR}/ghost-core-${PV}"
 

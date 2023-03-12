@@ -4,7 +4,7 @@
 EAPI=7
 
 DB_VER="4.8"
-inherit autotools db-use desktop xdg-utils
+inherit autotools db-use
 
 DESCRIPTION="Qt GUI for Ghost by John McAfee privacy coin"
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
@@ -12,7 +12,7 @@ SRC_URI="https://github.com/ghost-coin/ghost-core/archive/refs/tags/v${PV}.tar.g
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm arm64 aarch64 ~ppc ~ppc64 x86 amd64-linux x86-linux"
+KEYWORDS="amd64 arm arm64 ~ppc ~ppc64 x86 amd64-linux x86-linux"
 
 IUSE="+asm +qrcode +dbus +wallet +hardened test upnp zeromq"
 
@@ -44,7 +44,10 @@ BDEPEND="
 	dev-qt/linguist-tools:5
 "
 
+RESTRICT="!test? ( test )"
+
 S="${WORKDIR}/ghost-core-${PV}"
+
 src_prepare() {
 	default
 	eautoreconf

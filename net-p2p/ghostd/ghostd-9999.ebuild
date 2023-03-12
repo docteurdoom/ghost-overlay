@@ -34,6 +34,8 @@ BDEPEND="
 	|| ( >=sys-devel/gcc-7[cxx] >=sys-devel/clang-5 )
 "
 
+RESTRICT="!test? ( test )"
+
 src_prepare() {
 	default
 	eautoreconf

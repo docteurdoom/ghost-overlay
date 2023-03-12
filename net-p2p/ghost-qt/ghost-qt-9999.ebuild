@@ -4,7 +4,7 @@
 EAPI=7
 
 DB_VER="4.8"
-inherit autotools db-use desktop xdg-utils git-r3
+inherit autotools db-use git-r3
 
 DESCRIPTION="Qt GUI for Ghost by John McAfee privacy coin"
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
@@ -42,6 +42,8 @@ BDEPEND="
 	|| ( >=sys-devel/gcc-7[cxx] >=sys-devel/clang-5 )
 	dev-qt/linguist-tools:5
 "
+
+RESTRICT="!test? ( test )"
 
 src_prepare() {
 	default
