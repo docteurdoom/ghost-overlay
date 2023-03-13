@@ -4,7 +4,7 @@
 EAPI=7
 
 DB_VER="4.8"
-inherit autotools db-use git-r3
+inherit autotools db-use git-r3 xdg-utils
 
 DESCRIPTION="Qt GUI for Ghost by John McAfee privacy coin"
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
@@ -76,6 +76,11 @@ src_configure() {
 
 src_install() {
 	default
+}
+
+update_caches() {
+	xdg_icon_cache_update
+	xdg_desktop_database_update
 }
 
 pkg_postinst() {

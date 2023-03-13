@@ -69,11 +69,6 @@ src_install() {
 }
 
 pkg_postinst() {
-	update_caches
 	elog "To get ${PN} running on Musl-based systems,"
 	elog "make sure to set LC_ALL=\"C\" environment variable."
-}
-
-pkg_postrm() {
-	update_caches
 }
