@@ -12,13 +12,13 @@ SRC_URI="https://github.com/ghost-coin/ghost-core/archive/refs/tags/v${PV}.tar.g
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm arm64 ~ppc ~ppc64 x86 amd64-linux x86-linux"
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 
 IUSE="+asm +qrcode +dbus +wallet +hardened test upnp zeromq"
 
 RDEPEND="
 	dev-libs/boost:=
-	>dev-libs/libsecp256k1-0.1_pre20200911:=[recovery,schnorr]
+	>=dev-libs/libsecp256k1-0.2.0:=[recovery,schnorr]
 	>=dev-libs/univalue-1.0.4:=
 	dev-qt/qtcore:5
 	dev-qt/qtgui:5

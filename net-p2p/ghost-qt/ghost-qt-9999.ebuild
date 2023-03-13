@@ -17,7 +17,7 @@ IUSE="+asm +qrcode +dbus +wallet +hardened test upnp zeromq"
 
 RDEPEND="
 	dev-libs/boost:=
-	>dev-libs/libsecp256k1-0.1_pre20200911:=[recovery,schnorr]
+	>=dev-libs/libsecp256k1-0.2.0:=[recovery,schnorr]
 	>=dev-libs/univalue-1.0.4:=
 	dev-qt/qtcore:5
 	dev-qt/qtgui:5
