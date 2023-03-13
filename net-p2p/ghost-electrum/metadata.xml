@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>docteurdoom@bitmessage.de</email>
+    <description>Telegram @SexyGhost.</description>
+    <name>Doctor Doom</name>
+  </maintainer>
+  <use>
+    <flag name="qrcode">Add support for generating QR-codes.</flag>
+    <flag name="test">Enable tests.</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">ghost-coin/ghost-electrum</remote-id>
+    <bugs-to>https://github.com/ghost-coin/ghost-electrum/issues</bugs-to>
+  </upstream>
+</pkgmetadata>

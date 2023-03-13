@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>docteurdoom@bitmessage.de</email>
+    <description>Telegram @SexyGhost.</description>
+    <name>Doctor Doom</name>
+  </maintainer>
+  <use>
+    <flag name="asm">Use assembly routines for compiler optimisation.</flag>
+    <flag name="dbus">Enable D-Bus integration.</flag>
+    <flag name="hardened">Make hardened binaries for enhanced security.</flag>
+    <flag name="qrcode">Add support for generating QR-codes.</flag>
+    <flag name="wallet">Add support for wallet. Only GUI console will be built without this flag.</flag>
+    <flag name="test">Enable tests.</flag>
+    <flag name="upnp">Enable UPnP for firewall-jumping.</flag>
+    <flag name="zeromq">Allows generating ZMQ notifications.</flag>
+  </use>
+  <upstream>
+    <remote-id type="github">ghost-coin/ghost-core</remote-id>
+    <bugs-to>https://github.com/ghost-coin/ghost-core/issues</bugs-to>
+  </upstream>
+</pkgmetadata>
