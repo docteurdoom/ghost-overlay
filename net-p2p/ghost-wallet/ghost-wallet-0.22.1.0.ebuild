@@ -8,7 +8,7 @@ inherit autotools db-use
 
 DESCRIPTION="Wallet utility for Ghost by John McAfee privacy coin"
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
-SRC_URI="https://github.com/ghost-coin/ghost-core/archive/refs/tags/v${PV}.tar.gz"
+SRC_URI="https://github.com/ghost-coin/ghost-core/archive/refs/tags/v${PV}.tar.gz -> ghost-core-${PV}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
