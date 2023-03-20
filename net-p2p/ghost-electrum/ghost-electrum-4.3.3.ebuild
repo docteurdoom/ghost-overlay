@@ -10,7 +10,7 @@ inherit distutils-r1 xdg-utils
 
 DESCRIPTION="Lightweight Electrum wallet for Ghost Coin"
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
-SRC_URI="https://github.com/ghost-coin/ghost-electrum/archive/refs/tags/${PV}.tar.gz"
+SRC_URI="https://github.com/ghost-coin/ghost-electrum/archive/refs/tags/${PV}.tar.gz -> ghost-electrum-{PV}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
