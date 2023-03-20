@@ -19,15 +19,13 @@ RDEPEND="
 	dev-libs/boost:=
 	dev-libs/libevent:=
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")=[cxx]
-	ccache? (
-			dev-util/ccache
-		)
 "
 
 DEPEND="${RDEPEND}"
 BDEPEND="
 	>=sys-devel/automake-1.13
 	|| ( >=sys-devel/gcc-7[cxx] >=sys-devel/clang-5 )
+	ccache? ( dev-util/ccache )
 "
 
 RESTRICT="!test? ( test )"
