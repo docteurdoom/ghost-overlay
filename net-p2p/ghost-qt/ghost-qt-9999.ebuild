@@ -79,6 +79,7 @@ src_configure() {
 		--without-daemon
 		--disable-bench
 		--without-libs
+		--disable-static
 	)
 	econf "${my_econf[@]}"
 }
