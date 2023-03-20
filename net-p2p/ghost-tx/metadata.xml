@@ -9,6 +9,7 @@
   <use>
     <flag name="asm">Use assembly routines for compiler optimisation.</flag>
     <flag name="hardened">Make hardened binaries for enhanced security.</flag>
+    <flag name="ccache">Enable compiler cache for faster rebuilds.</flag>
     <flag name="test">Enable tests.</flag>
   </use>
   <upstream>

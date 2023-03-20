@@ -12,11 +12,14 @@ EGIT_REPO_URI="https://github.com/ghost-coin/ghost-core.git"
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="+asm +hardened test"
+IUSE="+asm +hardened ccache test"
 
 RDEPEND="
 	dev-libs/boost:=
 	dev-libs/libevent:=
+	ccache? (
+			dev-util/ccache
+		)
 "
 
 DEPEND="${RDEPEND}"
@@ -26,6 +29,14 @@ BDEPEND="
 "
 
 RESTRICT="!test? ( test )"
+
+pkg_pretend() {
+	if use ccache; then
+	ewarn "Make sure to configure Portage accordingly"
+	ewarn "to be able to use ccache."
+	ewarn "https://wiki.gentoo.org/wiki/Ccache"
+	fi
+}
 
 src_prepare() {
 	default
@@ -37,6 +48,7 @@ src_configure() {
 		$(use_enable asm)
 		$(use_enable test tests)
 		$(use_enable hardened hardening)
+		$(use_enable ccache ccache)
 		--disable-wallet
 		--enable-util-cli
 		--without-qrencode
@@ -49,7 +61,6 @@ src_configure() {
 		--without-daemon
 		--disable-bench
 		--without-libs
-		--disable-ccache
 	)
 	econf "${my_econf[@]}"
 }

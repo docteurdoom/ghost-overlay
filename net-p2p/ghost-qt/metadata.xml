@@ -12,6 +12,7 @@
     <flag name="hardened">Make hardened binaries for enhanced security.</flag>
     <flag name="qrcode">Add support for generating QR-codes.</flag>
     <flag name="wallet">Add support for wallet. Only GUI console will be built without this flag.</flag>
+    <flag name="ccache">Enable compiler cache for faster rebuilds.</flag>
     <flag name="test">Enable tests.</flag>
     <flag name="upnp">Enable UPnP for firewall-jumping.</flag>
     <flag name="zeromq">Allows generating ZMQ notifications.</flag>

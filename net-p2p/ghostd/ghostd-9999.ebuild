@@ -13,7 +13,7 @@ EGIT_REPO_URI="https://github.com/ghost-coin/ghost-core.git"
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="+asm +wallet +hardened test upnp zeromq"
+IUSE="+asm +wallet +hardened ccache test upnp zeromq"
 
 RDEPEND="
 	dev-libs/boost:=
@@ -25,6 +25,9 @@ RDEPEND="
 		)
 	upnp? ( >=net-libs/miniupnpc-1.9.20150916:= )
 	zeromq? ( net-libs/zeromq:= )
+	ccache? (
+			dev-util/ccache
+		)
 "
 
 DEPEND="${RDEPEND}"
@@ -34,6 +37,14 @@ BDEPEND="
 "
 
 RESTRICT="!test? ( test )"
+
+pkg_pretend() {
+	if use ccache; then
+	ewarn "Make sure to configure Portage accordingly"
+	ewarn "to be able to use ccache."
+	ewarn "https://wiki.gentoo.org/wiki/Ccache"
+	fi
+}
 
 src_prepare() {
 	default
@@ -49,6 +60,7 @@ src_configure() {
 		$(use_enable wallet)
 		$(use_enable zeromq zmq)
 		$(use_enable hardened hardening)
+		$(use_enable ccache ccache)
 		--without-qtdbus
 		--without-qrencode
 		--without-gui
@@ -59,7 +71,6 @@ src_configure() {
 		--with-daemon
 		--disable-bench
 		--without-libs
-		--disable-ccache
 	)
 	econf "${my_econf[@]}"
 }
