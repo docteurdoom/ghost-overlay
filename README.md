@@ -12,7 +12,7 @@ To add `ghost-overlay` repository:
 
 Now any package from [net-p2p](net-p2p) could be emerged, e.g.
 
-	sudo emerge --ask net-p2p/ghost-qt
+	sudo emerge --ask net-p2p/ghost-core
 
 To remove `ghost-overlay` repository:
 	
