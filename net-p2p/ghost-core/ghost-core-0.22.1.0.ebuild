@@ -8,7 +8,7 @@ inherit autotools db-use xdg-utils
 
 DESCRIPTION="Ghost by John McAfee privacy coin."
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
-SRC_URI="https://github.com/ghost-coin/ghost-core/archive/refs/tags/v${PV}.tar.gz -> ghost-core-${PV}.tar.gz"
+SRC_URI="https://github.com/ghost-coin/ghost-core/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
@@ -68,7 +68,7 @@ BDEPEND="
 
 RESTRICT="!test? ( test )"
 
-S="${WORKDIR}/ghost-core-${PV}"
+S="${WORKDIR}/${P}"
 
 pkg_pretend() {
 	if ! use wallet && use gui; then
