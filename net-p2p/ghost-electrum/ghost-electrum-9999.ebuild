@@ -44,6 +44,11 @@ BDEPEND="
 S="${WORKDIR}/ghost-electrum-${PV}"
 distutils_enable_tests pytest
 
+pkg_pretend() {
+	ewarn "Either one Ghost or Bitcoin Electrum"
+	ewarn "can be installed at the same time."
+}
+
 src_prepare() {
 	eapply_user
 
@@ -54,12 +59,12 @@ src_prepare() {
 src_install() {
 	dodoc RELEASE-NOTES
 	distutils-r1_src_install
+	dosym /usr/bin/electrum /usr/bin/ghost-electrum
 }
 
 pkg_postinst() {
 	xdg_icon_cache_update
 	xdg_desktop_database_update
-	elog "Run ${PN} with 'electrum' command."
 }
 
 pkg_postrm() {

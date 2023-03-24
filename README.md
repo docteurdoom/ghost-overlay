@@ -20,9 +20,5 @@ To remove `ghost-overlay` repository:
 
 ### Notes
 
-To run Ghost Electrum:
-
-	electrum
-
 To get Ghost Core components running on Musl-based systems, make sure
 to set `LC_ALL="C"` environment variable.
