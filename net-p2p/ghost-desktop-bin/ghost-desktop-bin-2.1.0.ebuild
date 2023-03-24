@@ -11,7 +11,7 @@ SRC_URI="https://github.com/ghost-coin/ghost-desktop/releases/download/v${PV}/gh
 S="${WORKDIR}"
 
 DEPEND="
-	net-p2p/ghost-core[utils]
+	net-p2p/ghost-core[daemon]
 "
 
 LICENSE="GPL-2"
