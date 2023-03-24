@@ -36,6 +36,8 @@ RDEPEND="
 	qrcode? ( media-gfx/zbar[v4l] )
 "
 BDEPEND="
+	!net-misc/electrum
+	!net-p2p/electrum
 	test? (
 		dev-python/pyaes[${PYTHON_USEDEP}]
 		dev-python/pycryptodome[${PYTHON_USEDEP}]
@@ -43,11 +45,6 @@ BDEPEND="
 "
 S="${WORKDIR}/ghost-electrum-${PV}"
 distutils_enable_tests pytest
-
-pkg_pretend() {
-	ewarn "Either one Ghost or Bitcoin Electrum"
-	ewarn "can be installed at the same time."
-}
 
 src_prepare() {
 	eapply_user
