@@ -144,4 +144,7 @@ pkg_postrm() {
 	if use gui; then
 		update_caches
 	fi
+
+	ewarn "Make sure to backup your wallets before"
+	ewarn "removing ~/.ghost directory."
 }
