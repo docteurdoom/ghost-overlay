@@ -68,4 +68,7 @@ pkg_postinst() {
 pkg_postrm() {
 	xdg_icon_cache_update
 	xdg_desktop_database_update
+
+	ewarn "To completely remove Ghost Electrum"
+	ewarn "rm -rf ~/.ghost-electrum"
 }

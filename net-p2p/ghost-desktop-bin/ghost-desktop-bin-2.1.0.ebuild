@@ -39,3 +39,8 @@ src_install() {
 pkg_postinst() {
 	xdg_pkg_postinst
 }
+
+pkg_postrm() {
+	ewarn "To completely remove Ghost Desktop"
+	ewarn "rm -rf ~/.config/ghost-desktop"
+}
