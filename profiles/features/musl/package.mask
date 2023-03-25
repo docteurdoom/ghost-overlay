@@ -3,4 +3,4 @@
 
 # Doctor Doom <docteurdoom@bitmessage.de> (2023-03-25)
 # Binary package, which is compiled against glibc.
-net-p2p/ghost-desktop
+net-p2p/ghost-desktop-bin
