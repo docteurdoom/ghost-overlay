@@ -8,7 +8,7 @@ PYTHON_COMPAT=( python3_{9..10} )
 
 inherit distutils-r1 xdg-utils
 
-DESCRIPTION="Lightweight Electrum wallet for Ghost Coin"
+DESCRIPTION="Lightweight Electrum wallet for Ghost Coin."
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
 SRC_URI="https://github.com/ghost-coin/ghost-electrum/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 
@@ -57,7 +57,7 @@ src_prepare() {
 src_install() {
 	dodoc RELEASE-NOTES
 	distutils-r1_src_install
-	dosym /usr/bin/electrum /usr/bin/ghost-electrum
+	dosym usr/bin/electrum usr/bin/ghost-electrum
 }
 
 pkg_postinst() {
@@ -68,7 +68,4 @@ pkg_postinst() {
 pkg_postrm() {
 	xdg_icon_cache_update
 	xdg_desktop_database_update
-
-	ewarn "To completely remove Ghost Electrum"
-	ewarn "rm -rf ~/.ghost-electrum"
 }

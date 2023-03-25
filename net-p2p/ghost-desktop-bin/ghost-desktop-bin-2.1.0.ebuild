@@ -5,9 +5,11 @@ EAPI=8
 
 inherit chromium-2 rpm xdg
 
+MY_PN="${PN/-bin}"
+
 DESCRIPTION="Sleek design wallet for Ghost Coin."
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
-SRC_URI="https://github.com/ghost-coin/ghost-desktop/releases/download/v${PV}/ghost-desktop-${PV}-linux-x86_64.rpm -> ${P}.rpm"
+SRC_URI="https://github.com/ghost-coin/${MY_PN}/releases/download/v${PV}/${MY_PN}-${PV}-linux-x86_64.rpm -> ${P}.rpm"
 S="${WORKDIR}"
 
 DEPEND="
@@ -24,10 +26,8 @@ pkg_pretend() {
 
 src_prepare() {
 	default
-	# Remove language packs bloat.
-	pushd "opt/Ghost Desktop/locales" || die
-	chromium_remove_language_paks
-	popd || die
+	mv "opt/Ghost Desktop/" "opt/${PN}"
+	mv "opt/${PN}/Ghost Desktop" "opt/${PN}/${PN}"
 }
 
 src_configure() {
@@ -35,25 +35,26 @@ src_configure() {
 	default
 }
 
-# Paths are absolute because package names have whitespaces.
+PREBUILT="
+	opt/${PN}/${PN}
+	opt/${PN}/libEGL.so
+	opt/${PN}/libffmpeg.so
+	opt/${PN}/libGLESv2.so
+	opt/${PN}/libVkICD_mock_icd.so
+"
+
 src_install() {
 	insinto /
 	doins -r opt
 
-	fperms +x "/opt/Ghost Desktop/Ghost Desktop"
-	fperms +x "/opt/Ghost Desktop/libEGL.so"
-	fperms +x "/opt/Ghost Desktop/libffmpeg.so"
-	fperms +x "/opt/Ghost Desktop/libGLESv2.so"
-	fperms +x "/opt/Ghost Desktop/libVkICD_mock_icd.so"
+	local b
+	for b in ${PREBUILT}; do
+		fperms +x "/${b}"
+	done
 
-	dosym /opt/Ghost\ Desktop/Ghost\ Desktop /usr/bin/ghost-desktop-bin
+	dosym ../../opt/${PN}/${PN} usr/bin/${PN}
 }
 
 pkg_postinst() {
 	xdg_pkg_postinst
-}
-
-pkg_postrm() {
-	ewarn "To completely remove Ghost Desktop"
-	ewarn "rm -rf ~/.config/ghost-desktop"
 }
