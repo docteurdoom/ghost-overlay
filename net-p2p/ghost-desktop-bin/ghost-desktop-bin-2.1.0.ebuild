@@ -3,11 +3,11 @@
 
 EAPI=8
 
-inherit unpacker xdg
+inherit chromium-2 rpm xdg
 
 DESCRIPTION="Sleek design wallet for Ghost Coin."
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
-SRC_URI="https://github.com/ghost-coin/ghost-desktop/releases/download/v${PV}/ghost-desktop-${PV}-linux-amd64.deb -> ${P}.deb"
+SRC_URI="https://github.com/ghost-coin/ghost-desktop/releases/download/v${PV}/ghost-desktop-${PV}-linux-x86_64.rpm -> ${P}.rpm"
 S="${WORKDIR}"
 
 DEPEND="
@@ -16,9 +16,22 @@ DEPEND="
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~x86"
+
+pkg_pretend() {
+	chromium_suid_sandbox_check_kernel_config
+}
 
 src_prepare() {
+	default
+	# Remove language packs bloat.
+	pushd "opt/Ghost Desktop/locales" || die
+	chromium_remove_language_paks
+	popd || die
+}
+
+src_configure() {
+	chromium_suid_sandbox_check_kernel_config
 	default
 }
 
