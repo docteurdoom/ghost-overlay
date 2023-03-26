@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Name=Ghost Qt
+Comment=Ghost by John McAfee privacy coin.
+Exec=ghost-qt %u
+Terminal=false
+Type=Application
+Icon=/usr/share/icons/hicolor/scalable/apps/ghost-qt.png
+Categories=Finance;P2P;Network;Qt;
+StartupWMClass=ghost-qt

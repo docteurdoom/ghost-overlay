@@ -4,7 +4,7 @@
 EAPI=7
 
 DB_VER="4.8"
-inherit autotools db-use xdg-utils
+inherit autotools db-use desktop xdg-utils
 
 DESCRIPTION="Ghost by John McAfee privacy coin."
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
@@ -78,6 +78,11 @@ pkg_pretend() {
 }
 
 src_prepare() {
+	# Icon is saved for later use
+	if use gui; then
+		cp src/qt/res/icons/particl.png ghost-qt.png
+	fi
+
 	default
 	eautoreconf
 }
@@ -112,6 +117,13 @@ src_configure() {
 
 src_install() {
 	default
+
+	if use gui; then
+		insinto /usr/share/icons/hicolor/scalable/apps
+		doins ghost-qt.png
+		cp "${FILESDIR}/ghost-qt.desktop" "${T}"
+		domenu "${T}/ghost-qt.desktop"
+	fi
 }
 
 update_caches() {
@@ -123,6 +135,7 @@ pkg_postinst() {
 	if use gui; then
 		update_caches
 	fi
+
 	elog "To get ${PN} running on Musl-based systems,"
 	elog "make sure to set LC_ALL=\"C\" environment variable."
 
