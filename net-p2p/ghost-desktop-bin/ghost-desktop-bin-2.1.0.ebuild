@@ -26,8 +26,20 @@ pkg_pretend() {
 
 src_prepare() {
 	default
+
+	# Renaming is done due to whitespaces breaking icon caching.
 	mv "opt/Ghost Desktop/" "opt/${PN}"
 	mv "opt/${PN}/Ghost Desktop" "opt/${PN}/${PN}"
+	pushd "usr/share/icons/hicolor"
+	for DIR in $(ls -A); do
+		[ -d "${DIR}" ] && mv "${DIR}/apps/Ghost Desktop.png" "${DIR}/apps/${PN}.png"
+	done
+	popd
+
+	sed -i "s/Ghost Desktop/ghost-desktop-bin/g" "usr/share/applications/Ghost Desktop.desktop"
+
+	# Files in local usr/lib are only used in Fedora and causing warnings if not deleted.
+	rm -rf "usr/lib"
 }
 
 src_configure() {
@@ -36,20 +48,21 @@ src_configure() {
 }
 
 PREBUILT="
-	opt/${PN}/${PN}
-	opt/${PN}/libEGL.so
-	opt/${PN}/libffmpeg.so
-	opt/${PN}/libGLESv2.so
-	opt/${PN}/libVkICD_mock_icd.so
+	${PN}
+	libEGL.so
+	libffmpeg.so
+	libGLESv2.so
+	libVkICD_mock_icd.so
 "
 
 src_install() {
 	insinto /
+	doins -r usr
 	doins -r opt
 
 	local b
 	for b in ${PREBUILT}; do
-		fperms +x "/${b}"
+		fperms +x "/opt/${PN}/${b}"
 	done
 
 	dosym ../../opt/${PN}/${PN} usr/bin/${PN}
