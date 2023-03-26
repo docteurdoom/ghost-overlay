@@ -56,7 +56,7 @@ src_prepare() {
 src_install() {
 	dodoc RELEASE-NOTES
 	distutils-r1_src_install
-	dosym usr/bin/electrum usr/bin/ghost-electrum
+	dosym ../../usr/bin/electrum usr/bin/ghost-electrum
 }
 
 pkg_postinst() {
