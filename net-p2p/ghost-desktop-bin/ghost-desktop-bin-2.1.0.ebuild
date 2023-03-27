@@ -7,7 +7,7 @@ inherit chromium-2 rpm xdg
 
 MY_PN="${PN/-bin}"
 
-DESCRIPTION="Sleek design wallet for Ghost Coin."
+DESCRIPTION="Sleek design wallet for Ghost Coin (binary package)."
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
 SRC_URI="https://github.com/ghost-coin/${MY_PN}/releases/download/v${PV}/${MY_PN}-${PV}-linux-x86_64.rpm -> ${P}.rpm"
 S="${WORKDIR}"
@@ -30,13 +30,14 @@ src_prepare() {
 	# Renaming is done due to whitespaces breaking icon caching.
 	mv "opt/Ghost Desktop/" "opt/${PN}"
 	mv "opt/${PN}/Ghost Desktop" "opt/${PN}/${PN}"
+	mv "usr/share/applications/Ghost Desktop.desktop" "usr/share/applications/${PN}.desktop"
 	pushd "usr/share/icons/hicolor"
 	for DIR in $(ls -A); do
 		[ -d "${DIR}" ] && mv "${DIR}/apps/Ghost Desktop.png" "${DIR}/apps/${PN}.png"
 	done
 	popd
 
-	sed -i "s/Ghost Desktop/ghost-desktop-bin/g" "usr/share/applications/Ghost Desktop.desktop"
+	sed -i "s/Icon=.*/Icon=\/usr\/share\/icons\/hicolor\/512x512\/apps\/${PN}\.png/" "usr/share/applications/${PN}.desktop"
 
 	# Files in local usr/lib are only used in Fedora and causing warnings if not deleted.
 	rm -rf "usr/lib"
