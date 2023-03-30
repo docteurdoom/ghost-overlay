@@ -10,7 +10,7 @@ inherit distutils-r1 xdg-utils git-r3
 
 DESCRIPTION="Lightweight Electrum wallet for Ghost Coin."
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
-EGIT_REPO_URI="https://github.com/ghost-coin/ghost-electrum.git"
+EGIT_REPO_URI="https://github.com/ghost-coin/${PN}.git"
 
 LICENSE="MIT"
 SLOT="0"

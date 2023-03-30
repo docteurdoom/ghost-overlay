@@ -8,7 +8,7 @@ inherit autotools db-use desktop git-r3 xdg-utils
 
 DESCRIPTION="Ghost by John McAfee privacy coin."
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
-EGIT_REPO_URI="https://github.com/ghost-coin/ghost-core.git"
+EGIT_REPO_URI="https://github.com/ghost-coin/${PN}.git"
 
 LICENSE="MIT"
 SLOT="0"

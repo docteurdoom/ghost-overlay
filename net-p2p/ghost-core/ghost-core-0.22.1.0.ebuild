@@ -8,7 +8,7 @@ inherit autotools db-use desktop xdg-utils
 
 DESCRIPTION="Ghost by John McAfee privacy coin."
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
-SRC_URI="https://github.com/ghost-coin/ghost-core/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/ghost-coin/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
