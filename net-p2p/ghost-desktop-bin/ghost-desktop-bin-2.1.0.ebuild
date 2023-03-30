@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit chromium-2 rpm xdg
+inherit chromium-2 desktop rpm xdg
 
 MY_PN="${PN/-bin}"
 
@@ -30,14 +30,15 @@ src_prepare() {
 	# Renaming is done due to whitespaces breaking icon caching.
 	mv "opt/Ghost Desktop/" "opt/${PN}"
 	mv "opt/${PN}/Ghost Desktop" "opt/${PN}/${PN}"
-	mv "usr/share/applications/Ghost Desktop.desktop" "usr/share/applications/${PN}.desktop"
+
 	pushd "usr/share/icons/hicolor"
 	for DIR in $(ls -A); do
 		[ -d "${DIR}" ] && mv "${DIR}/apps/Ghost Desktop.png" "${DIR}/apps/${PN}.png"
 	done
 	popd
 
-	sed -i "s/Icon=.*/Icon=\/usr\/share\/icons\/hicolor\/512x512\/apps\/${PN}\.png/" "usr/share/applications/${PN}.desktop"
+	# Upstream shipped desktop entry is replaced with ebuild's.
+	rm -rf "usr/share/applications/"
 
 	# Files in local usr/lib are only used in Fedora and causing warnings if not deleted.
 	rm -rf "usr/lib"
@@ -65,6 +66,9 @@ src_install() {
 	for b in ${PREBUILT}; do
 		fperms +x "/opt/${PN}/${b}"
 	done
+
+	cp "${FILESDIR}/${PN}.desktop" "${T}"
+	domenu "${T}/${PN}.desktop"
 
 	dosym ../../opt/${PN}/${PN} usr/bin/${PN}
 }

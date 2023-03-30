@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Name=Ghost Desktop
+Comment=Ghost, P2P privacy ecosystem.
+Exec=ghost-desktop-bin %u
+Terminal=false
+Type=Application
+Icon=/usr/share/icons/hicolor/512x512/apps/ghost-desktop-bin.png
+Categories=Finance;P2P;Network;Electron;
+StartupWMClass=Ghost Desktop
