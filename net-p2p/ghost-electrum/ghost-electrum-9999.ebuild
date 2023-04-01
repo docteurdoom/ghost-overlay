@@ -6,11 +6,18 @@ EAPI=8
 DISTUTILS_USE_PEP517=setuptools
 PYTHON_COMPAT=( python3_{9..10} )
 
-inherit distutils-r1 xdg-utils git-r3
+inherit distutils-r1 xdg-utils
 
 DESCRIPTION="Lightweight Electrum wallet for Ghost Coin."
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
-EGIT_REPO_URI="https://github.com/ghost-coin/${PN}.git"
+
+if [[ ${PV} = *9999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/ghost-coin/${PN}.git"
+else
+	SRC_URI="https://github.com/ghost-coin/${PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
+	KEYWORDS="amd64 x86"
+fi
 
 LICENSE="MIT"
 SLOT="0"
@@ -43,7 +50,9 @@ BDEPEND="
 		dev-python/pycryptodome[${PYTHON_USEDEP}]
 	)
 "
-S="${WORKDIR}/ghost-electrum-${PV}"
+
+S="${WORKDIR}/${P}"
+
 distutils_enable_tests pytest
 
 src_prepare() {

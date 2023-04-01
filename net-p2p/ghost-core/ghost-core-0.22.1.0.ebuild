@@ -8,12 +8,18 @@ inherit autotools db-use desktop xdg-utils
 
 DESCRIPTION="Ghost by John McAfee privacy coin."
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
-SRC_URI="https://github.com/ghost-coin/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
+
+if [[ ${PV} = *9999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/ghost-coin/${PN}.git"
+else
+	SRC_URI="https://github.com/ghost-coin/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
+	KEYWORDS="amd64 ~arm ~arm64 ~ppc ~ppc64 x86 ~amd64-linux ~x86-linux"
+fi
 
 LICENSE="MIT"
 SLOT="0"
 
-KEYWORDS="amd64 ~arm ~arm64 ~ppc ~ppc64 x86 ~amd64-linux ~x86-linux"
 IUSE="+asm +qrcode +dbus +wallet +hardened +gui +daemon +utils bench test upnp zeromq"
 REQUIRED_USE="
 	wallet? (

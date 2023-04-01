@@ -10,11 +10,17 @@ inherit distutils-r1 xdg-utils
 
 DESCRIPTION="Lightweight Electrum wallet for Ghost Coin."
 HOMEPAGE="https://ipfs.ghostbyjohnmcafee.com/#/"
-SRC_URI="https://github.com/ghost-coin/${PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
+
+if [[ ${PV} = *9999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/ghost-coin/${PN}.git"
+else
+	SRC_URI="https://github.com/ghost-coin/${PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
+	KEYWORDS="amd64 x86"
+fi
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 x86"
 IUSE="qrcode test"
 
 RDEPEND="
@@ -44,7 +50,9 @@ BDEPEND="
 		dev-python/pycryptodome[${PYTHON_USEDEP}]
 	)
 "
+
 S="${WORKDIR}/${P}"
+
 distutils_enable_tests pytest
 
 src_prepare() {
