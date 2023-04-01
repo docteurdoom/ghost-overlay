@@ -106,7 +106,7 @@ src_configure() {
 		$(use_with wallet sqlite)
 		$(use_enable zeromq zmq)
 		$(use_enable hardened hardening)
-		$(use_with gui gui=qt5)
+		$(use_with gui gui)
 		$(use_with daemon daemon)
 		$(use_enable utils util)
 		$(use_enable utils util-cli)
