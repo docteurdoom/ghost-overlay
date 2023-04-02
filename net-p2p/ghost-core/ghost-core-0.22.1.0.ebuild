@@ -20,7 +20,7 @@ fi
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="+asm +qrcode +dbus +wallet +hardened +gui +daemon +utils bench test upnp zeromq"
+IUSE="+asm +qrcode +dbus +wallet +hardened +gui +daemon +utils clang bench test upnp zeromq"
 REQUIRED_USE="
 	wallet? (
 		|| ( gui daemon )
@@ -68,7 +68,8 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 BDEPEND="
 	>=sys-devel/automake-1.13
-	|| ( >=sys-devel/gcc-7[cxx] >=sys-devel/clang-5 )
+	!clang? ( >=sys-devel/gcc-7[cxx] )
+	clang? ( >=sys-devel/clang-5 )
 	gui? ( dev-qt/linguist-tools:5 )
 "
 
@@ -94,6 +95,11 @@ src_prepare() {
 }
 
 src_configure() {
+	if use clang; then
+		CC="${CHOST}-clang"
+		CXX="${CHOST}-clang++"
+	fi
+
 	local my_econf=(
 		$(use_enable asm)
 		$(use_with dbus qtdbus)

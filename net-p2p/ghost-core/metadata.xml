@@ -19,6 +19,7 @@
     <flag name="test">Build executables for tests.</flag>
     <flag name="upnp">Enable UPnP for firewall-jumping.</flag>
     <flag name="zeromq">Allows generating ZMQ notifications.</flag>
+    <flag name="clang">Build with Clang instead of GCC.</flag>
   </use>
   <upstream>
     <remote-id type="github">ghost-coin/ghost-core</remote-id>
