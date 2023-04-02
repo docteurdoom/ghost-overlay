@@ -13,7 +13,7 @@ SRC_URI="https://github.com/ghost-coin/${MY_PN}/releases/download/v${PV}/${MY_PN
 S="${WORKDIR}"
 
 DEPEND="
-	net-p2p/ghost-core[daemon]
+	net-p2p/ghost-core[daemon,utils]
 "
 
 LICENSE="GPL-2"
