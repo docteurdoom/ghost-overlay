@@ -96,8 +96,8 @@ src_prepare() {
 
 src_configure() {
 	if use clang; then
-		CC="${CHOST}-clang"
-		CXX="${CHOST}-clang++"
+		export CC="${CHOST}-clang"
+		export CXX="${CHOST}-clang++"
 	fi
 
 	local my_econf=(
