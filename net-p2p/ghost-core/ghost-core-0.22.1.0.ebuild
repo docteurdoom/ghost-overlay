@@ -53,13 +53,13 @@ RDEPEND="
 		dev-qt/qtgui:5
 		dev-qt/qtnetwork:5
 		dev-qt/qtwidgets:5
-		)
+	)
 	dbus? ( dev-qt/qtdbus:5 )
 	utils? ( ${DEP_DB} )
 	wallet? (
 		>=dev-db/sqlite-3.7.17:=
 		${DEP_DB}
-		)
+	)
 	qrcode? ( media-gfx/qrencode:= )
 	upnp? ( >=net-libs/miniupnpc-1.9.20150916:= )
 	zeromq? ( net-libs/zeromq:= )

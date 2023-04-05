@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Name=Ghost Electrum
+Comment=Lightweight Electrum wallet for Ghost Coin.
+Exec=ghost-electrum %u
+Terminal=false
+Type=Application
+Icon=/usr/share/icons/hicolor/scalable/apps/ghost-electrum.png
+Categories=Finance;P2P;Network;
+StartupWMClass=ghost-electrum
