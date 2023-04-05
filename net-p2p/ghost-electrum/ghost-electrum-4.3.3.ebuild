@@ -61,18 +61,17 @@ src_prepare() {
 	xdg_environment_reset
 	distutils-r1_src_prepare
 
+	rm -rf electrum.desktop
+	cp "${FILESDIR}/${PN}.desktop" "${S}/electrum.desktop"
 	cp electrum/gui/icons/electrum.png ${PN}.png
 }
 
 src_install() {
-	dodoc RELEASE-NOTES
 	distutils-r1_src_install
 	dosym ../../usr/bin/electrum usr/bin/ghost-electrum
 
 	insinto /usr/share/icons/hicolor/scalable/apps
 	doins ${PN}.png
-	cp "${FILESDIR}/${PN}.desktop" "${T}"
-	domenu "${T}/${PN}.desktop"
 }
 
 pkg_postinst() {
