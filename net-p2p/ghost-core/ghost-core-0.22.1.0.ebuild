@@ -20,7 +20,7 @@ fi
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="+asm +qrcode +dbus +wallet +hardened +gui +daemon +utils clang bench test upnp zeromq"
+IUSE="+asm +qrcode +dbus +wallet +hardened +gui +daemon +utils bench test upnp zeromq"
 REQUIRED_USE="
 	wallet? (
 		|| ( gui daemon )
@@ -68,8 +68,7 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 BDEPEND="
 	>=sys-devel/automake-1.13
-	!clang? ( >=sys-devel/gcc-7[cxx] )
-	clang? ( >=sys-devel/clang-5 )
+	|| ( >=sys-devel/gcc-7[cxx] >=sys-devel/clang-5 )
 	gui? ( dev-qt/linguist-tools:5 )
 "
 
@@ -77,15 +76,7 @@ RESTRICT="!test? ( test )"
 
 S="${WORKDIR}/${P}"
 
-pkg_pretend() {
-	if ! use wallet && use gui; then
-		ewarn "Be aware that choosing GUI without wallet"
-		ewarn "will build only GUI console."
-	fi
-}
-
 src_prepare() {
-	# Icon is saved for later use
 	if use gui; then
 		cp src/qt/res/icons/particl.png ghost-qt.png
 	fi
@@ -95,11 +86,6 @@ src_prepare() {
 }
 
 src_configure() {
-	if use clang; then
-		export CC="${CHOST}-clang"
-		export CXX="${CHOST}-clang++"
-	fi
-
 	local my_econf=(
 		$(use_enable asm)
 		$(use_with dbus qtdbus)
