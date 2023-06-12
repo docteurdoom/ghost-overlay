@@ -20,7 +20,7 @@ fi
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="+asm +qrcode +dbus +wallet +hardened +gui +daemon +utils bench test upnp zeromq"
+IUSE="+asm +qrcode +dbus +wallet +hardened +gui +daemon +utils bench test upnp zeromq man"
 REQUIRED_USE="
 	wallet? (
 		|| ( gui daemon )
@@ -105,6 +105,7 @@ src_configure() {
 		$(use_enable utils util-tx)
 		$(use_enable utils util-wallet)
 		$(use_enable bench bench)
+		$(use_enable man man)
 		--disable-multiprocess
 		--without-multiprocess
 		--without-libs
