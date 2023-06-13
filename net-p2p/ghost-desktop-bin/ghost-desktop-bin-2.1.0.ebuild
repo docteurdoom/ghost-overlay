@@ -14,6 +14,7 @@ S="${WORKDIR}"
 
 DEPEND="
 	net-p2p/ghost-core[daemon,utils]
+	sys-libs/glibc
 "
 
 LICENSE="GPL-2"
