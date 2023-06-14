@@ -14,7 +14,7 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/ghost-coin/${PN}.git"
 else
 	SRC_URI="https://github.com/ghost-coin/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="amd64 ~arm ~arm64 ~ppc ~ppc64 x86 ~amd64-linux ~x86-linux"
+	KEYWORDS="amd64 ~arm ~arm64 ~ppc ~ppc64 x86 ~amd64-linux ~x86-linux ~riscv"
 fi
 
 LICENSE="MIT"
