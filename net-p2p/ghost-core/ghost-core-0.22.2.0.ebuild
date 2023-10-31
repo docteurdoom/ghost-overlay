@@ -74,7 +74,6 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}"/0000-dont-track-during-verifydb.patch
-	"${FILESDIR}"/0001-fix-reward-tracker-on-restart.patch
 	"${FILESDIR}"/0002-fix-compilation.patch
 	"${FILESDIR}"/0003-particl-changes.patch
 )
