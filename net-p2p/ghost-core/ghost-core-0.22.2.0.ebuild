@@ -74,7 +74,6 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}"/0000-dont-track-during-verifydb.patch
-	"${FILESDIR}"/0002-fix-compilation.patch
 )
 
 RESTRICT="!test? ( test )"
