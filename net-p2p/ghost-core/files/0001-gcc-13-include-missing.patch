@@ -1,0 +1,485 @@
+diff --git a/src/key/mnemonic.h b/src/key/mnemonic.h
+index 4f7203352..0076d9ea4 100644
+--- a/src/key/mnemonic.h
++++ b/src/key/mnemonic.h
+@@ -8,6 +8,7 @@
+ 
+ #include <string>
+ #include <vector>
++#include <cstdint>
+ 
+ namespace mnemonic {
+ 
+diff --git a/src/support/lockedpool.cpp b/src/support/lockedpool.cpp
+index 26de780f2..bc93eafe9 100644
+--- a/src/support/lockedpool.cpp
++++ b/src/support/lockedpool.cpp
+@@ -2,8 +2,9 @@
+ // Distributed under the MIT software license, see the accompanying
+ // file COPYING or http://www.opensource.org/licenses/mit-license.php.
+ 
+-#include <support/lockedpool.h>
++#include <stdexcept>
+ #include <support/cleanse.h>
++#include <support/lockedpool.h>
+ 
+ #if defined(HAVE_CONFIG_H)
+ #include <config/bitcoin-config.h>
+@@ -15,10 +16,10 @@
+ #endif
+ #include <windows.h>
+ #else
+-#include <sys/mman.h> // for mmap
++#include <limits.h>       // for PAGESIZE
++#include <sys/mman.h>     // for mmap
+ #include <sys/resource.h> // for getrlimit
+-#include <limits.h> // for PAGESIZE
+-#include <unistd.h> // for sysconf
++#include <unistd.h>       // for sysconf
+ #endif
+ 
+ #include <algorithm>
+@@ -41,8 +42,7 @@ static inline size_t align_up(size_t x, size_t align)
+ /*******************************************************************************/
+ // Implementation: Arena
+ 
+-Arena::Arena(void *base_in, size_t size_in, size_t alignment_in):
+-    base(static_cast<char*>(base_in)), end(static_cast<char*>(base_in) + size_in), alignment(alignment_in)
++Arena::Arena(void* base_in, size_t size_in, size_t alignment_in) : base(static_cast<char*>(base_in)), end(static_cast<char*>(base_in) + size_in), alignment(alignment_in)
+ {
+     // Start with one free chunk that covers the entire arena
+     auto it = size_to_free_chunk.emplace(size_in, base);
+@@ -89,7 +89,7 @@ void* Arena::alloc(size_t size)
+     return reinterpret_cast<void*>(allocated->first);
+ }
+ 
+-void Arena::free(void *ptr)
++void Arena::free(void* ptr)
+ {
+     // Freeing the nullptr pointer is OK.
+     if (ptr == nullptr) {
+@@ -129,28 +129,26 @@ void Arena::free(void *ptr)
+ 
+ Arena::Stats Arena::stats() const
+ {
+-    Arena::Stats r{ 0, 0, 0, chunks_used.size(), chunks_free.size() };
+-    for (const auto& chunk: chunks_used)
++    Arena::Stats r{0, 0, 0, chunks_used.size(), chunks_free.size()};
++    for (const auto& chunk : chunks_used)
+         r.used += chunk.second;
+-    for (const auto& chunk: chunks_free)
++    for (const auto& chunk : chunks_free)
+         r.free += chunk.second->first;
+     r.total = r.used + r.free;
+     return r;
+ }
+ 
+ #ifdef ARENA_DEBUG
+-static void printchunk(void* base, size_t sz, bool used) {
+-    std::cout <<
+-        "0x" << std::hex << std::setw(16) << std::setfill('0') << base <<
+-        " 0x" << std::hex << std::setw(16) << std::setfill('0') << sz <<
+-        " 0x" << used << std::endl;
++static void printchunk(void* base, size_t sz, bool used)
++{
++    std::cout << "0x" << std::hex << std::setw(16) << std::setfill('0') << base << " 0x" << std::hex << std::setw(16) << std::setfill('0') << sz << " 0x" << used << std::endl;
+ }
+ void Arena::walk() const
+ {
+-    for (const auto& chunk: chunks_used)
++    for (const auto& chunk : chunks_used)
+         printchunk(chunk.first, chunk.second, true);
+     std::cout << std::endl;
+-    for (const auto& chunk: chunks_free)
++    for (const auto& chunk : chunks_free)
+         printchunk(chunk.first, chunk.second->first, false);
+     std::cout << std::endl;
+ }
+@@ -162,13 +160,14 @@ void Arena::walk() const
+ #ifdef WIN32
+ /** LockedPageAllocator specialized for Windows.
+  */
+-class Win32LockedPageAllocator: public LockedPageAllocator
++class Win32LockedPageAllocator : public LockedPageAllocator
+ {
+ public:
+     Win32LockedPageAllocator();
+-    void* AllocateLocked(size_t len, bool *lockingSuccess) override;
++    void* AllocateLocked(size_t len, bool* lockingSuccess) override;
+     void FreeLocked(void* addr, size_t len) override;
+     size_t GetLimit() override;
++
+ private:
+     size_t page_size;
+ };
+@@ -180,10 +179,10 @@ Win32LockedPageAllocator::Win32LockedPageAllocator()
+     GetSystemInfo(&sSysInfo);
+     page_size = sSysInfo.dwPageSize;
+ }
+-void *Win32LockedPageAllocator::AllocateLocked(size_t len, bool *lockingSuccess)
++void* Win32LockedPageAllocator::AllocateLocked(size_t len, bool* lockingSuccess)
+ {
+     len = align_up(len, page_size);
+-    void *addr = VirtualAlloc(nullptr, len, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
++    void* addr = VirtualAlloc(nullptr, len, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+     if (addr) {
+         // VirtualLock is used to attempt to keep keying material out of swap. Note
+         // that it does not provide this as a guarantee, but, in practice, memory
+@@ -214,13 +213,14 @@ size_t Win32LockedPageAllocator::GetLimit()
+ /** LockedPageAllocator specialized for OSes that don't try to be
+  * special snowflakes.
+  */
+-class PosixLockedPageAllocator: public LockedPageAllocator
++class PosixLockedPageAllocator : public LockedPageAllocator
+ {
+ public:
+     PosixLockedPageAllocator();
+-    void* AllocateLocked(size_t len, bool *lockingSuccess) override;
++    void* AllocateLocked(size_t len, bool* lockingSuccess) override;
+     void FreeLocked(void* addr, size_t len) override;
+     size_t GetLimit() override;
++
+ private:
+     size_t page_size;
+ };
+@@ -230,7 +230,7 @@ PosixLockedPageAllocator::PosixLockedPageAllocator()
+     // Determine system page size in bytes
+ #if defined(PAGESIZE) // defined in limits.h
+     page_size = PAGESIZE;
+-#else                   // assume some POSIX OS
++#else // assume some POSIX OS
+     page_size = sysconf(_SC_PAGESIZE);
+ #endif
+ }
+@@ -241,11 +241,11 @@ PosixLockedPageAllocator::PosixLockedPageAllocator()
+ #define MAP_ANONYMOUS MAP_ANON
+ #endif
+ 
+-void *PosixLockedPageAllocator::AllocateLocked(size_t len, bool *lockingSuccess)
++void* PosixLockedPageAllocator::AllocateLocked(size_t len, bool* lockingSuccess)
+ {
+-    void *addr;
++    void* addr;
+     len = align_up(len, page_size);
+-    addr = mmap(nullptr, len, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
++    addr = mmap(nullptr, len, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+     if (addr == MAP_FAILED) {
+         return nullptr;
+     }
+@@ -283,8 +283,7 @@ size_t PosixLockedPageAllocator::GetLimit()
+ /*******************************************************************************/
+ // Implementation: LockedPool
+ 
+-LockedPool::LockedPool(std::unique_ptr<LockedPageAllocator> allocator_in, LockingFailed_Callback lf_cb_in):
+-    allocator(std::move(allocator_in)), lf_cb(lf_cb_in), cumulative_bytes_locked(0)
++LockedPool::LockedPool(std::unique_ptr<LockedPageAllocator> allocator_in, LockingFailed_Callback lf_cb_in) : allocator(std::move(allocator_in)), lf_cb(lf_cb_in), cumulative_bytes_locked(0)
+ {
+ }
+ 
+@@ -300,8 +299,8 @@ void* LockedPool::alloc(size_t size)
+         return nullptr;
+ 
+     // Try allocating from each current arena
+-    for (auto &arena: arenas) {
+-        void *addr = arena.alloc(size);
++    for (auto& arena : arenas) {
++        void* addr = arena.alloc(size);
+         if (addr) {
+             return addr;
+         }
+@@ -313,12 +312,12 @@ void* LockedPool::alloc(size_t size)
+     return nullptr;
+ }
+ 
+-void LockedPool::free(void *ptr)
++void LockedPool::free(void* ptr)
+ {
+     std::lock_guard<std::mutex> lock(mutex);
+     // TODO we can do better than this linear search by keeping a map of arena
+     // extents to arena, and looking up the address.
+-    for (auto &arena: arenas) {
++    for (auto& arena : arenas) {
+         if (arena.addressInArena(ptr)) {
+             arena.free(ptr);
+             return;
+@@ -331,7 +330,7 @@ LockedPool::Stats LockedPool::stats() const
+ {
+     std::lock_guard<std::mutex> lock(mutex);
+     LockedPool::Stats r{0, 0, 0, cumulative_bytes_locked, 0, 0};
+-    for (const auto &arena: arenas) {
++    for (const auto& arena : arenas) {
+         Arena::Stats i = arena.stats();
+         r.used += i.used;
+         r.free += i.free;
+@@ -355,7 +354,7 @@ bool LockedPool::new_arena(size_t size, size_t align)
+             size = std::min(size, limit);
+         }
+     }
+-    void *addr = allocator->AllocateLocked(size, &locked);
++    void* addr = allocator->AllocateLocked(size, &locked);
+     if (!addr) {
+         return false;
+     }
+@@ -371,8 +370,7 @@ bool LockedPool::new_arena(size_t size, size_t align)
+     return true;
+ }
+ 
+-LockedPool::LockedPageArena::LockedPageArena(LockedPageAllocator *allocator_in, void *base_in, size_t size_in, size_t align_in):
+-    Arena(base_in, size_in, align_in), base(base_in), size(size_in), allocator(allocator_in)
++LockedPool::LockedPageArena::LockedPageArena(LockedPageAllocator* allocator_in, void* base_in, size_t size_in, size_t align_in) : Arena(base_in, size_in, align_in), base(base_in), size(size_in), allocator(allocator_in)
+ {
+ }
+ LockedPool::LockedPageArena::~LockedPageArena()
+@@ -383,8 +381,7 @@ LockedPool::LockedPageArena::~LockedPageArena()
+ /*******************************************************************************/
+ // Implementation: LockedPoolManager
+ //
+-LockedPoolManager::LockedPoolManager(std::unique_ptr<LockedPageAllocator> allocator_in):
+-    LockedPool(std::move(allocator_in), &LockedPoolManager::LockingFailed)
++LockedPoolManager::LockedPoolManager(std::unique_ptr<LockedPageAllocator> allocator_in) : LockedPool(std::move(allocator_in), &LockedPoolManager::LockingFailed)
+ {
+ }
+ 
+diff --git a/src/util/bip32.cpp b/src/util/bip32.cpp
+index 4c7e94836..83e4b6e9e 100644
+--- a/src/util/bip32.cpp
++++ b/src/util/bip32.cpp
+@@ -35,7 +35,7 @@ bool ParseHDKeypath(const std::string& keypath_str, std::vector<uint32_t>& keypa
+         }
+ 
+         // Ensure this is only numbers
+-        if (item.find_first_not_of( "0123456789" ) != std::string::npos) {
++        if (item.find_first_not_of("0123456789") != std::string::npos) {
+             return false;
+         }
+         uint32_t number;
+diff --git a/src/util/bip32.h b/src/util/bip32.h
+index 347e83db9..d35216255 100644
+--- a/src/util/bip32.h
++++ b/src/util/bip32.h
+@@ -8,6 +8,7 @@
+ #include <attributes.h>
+ #include <string>
+ #include <vector>
++#include <cstdint>
+ 
+ /** Parse an HD keypaths like "m/7/0'/2000". */
+ NODISCARD bool ParseHDKeypath(const std::string& keypath_str, std::vector<uint32_t>& keypath);
+diff --git a/src/util/string.cpp b/src/util/string.cpp
+index 603db2dcd..7b73bcd6d 100644
+--- a/src/util/string.cpp
++++ b/src/util/string.cpp
+@@ -2,33 +2,32 @@
+ // Distributed under the MIT software license, see the accompanying
+ // file COPYING or http://www.opensource.org/licenses/mit-license.php.
+ 
+-#include <util/string.h>
+ #include <algorithm>
++#include <cstdint>
+ #include <cstring>
+ #include <tinyformat.h>
++#include <util/string.h>
+ 
+-namespace part
+-{
++namespace part {
+ static bool icompare_pred(unsigned char a, unsigned char b)
+ {
+     return std::tolower(a) == std::tolower(b);
+ };
+-static bool icompare_str(const std::string &a, const std::string &b)
++static bool icompare_str(const std::string& a, const std::string& b)
+ {
+-    return a.length() == b.length()
+-        && std::equal(b.begin(), b.end(), a.begin(), icompare_pred);
++    return a.length() == b.length() && std::equal(b.begin(), b.end(), a.begin(), icompare_pred);
+ };
+ 
+-void *memrchr(const void *s, int c, size_t n)
++void* memrchr(const void* s, int c, size_t n)
+ {
+     if (n < 1)
+         return nullptr;
+ 
+-    unsigned char *cp = (unsigned char*) s + n;
++    unsigned char* cp = (unsigned char*)s + n;
+ 
+     do {
+-        if (*(--cp) == (unsigned char) c)
+-            return (void*) cp;
++        if (*(--cp) == (unsigned char)c)
++            return (void*)cp;
+     } while (--n != 0);
+ 
+     return nullptr;
+@@ -36,38 +35,38 @@ void *memrchr(const void *s, int c, size_t n)
+ 
+ // memcmp_nta - memcmp that is secure against timing attacks
+ // returns 0 if both areas are equal to each other, non-zero otherwise
+-int memcmp_nta(const void *cs, const void *ct, size_t count)
++int memcmp_nta(const void* cs, const void* ct, size_t count)
+ {
+     const unsigned char *su1, *su2;
+     int res = 0;
+ 
+     for (su1 = (unsigned char*)cs, su2 = (unsigned char*)ct;
+-        0 < count; ++su1, ++su2, count--)
++         0 < count; ++su1, ++su2, count--)
+         res |= (*su1 ^ *su2);
+ 
+     return res;
+ };
+ 
+-void ReplaceStrInPlace(std::string &subject, const std::string search, const std::string replace)
++void ReplaceStrInPlace(std::string& subject, const std::string search, const std::string replace)
+ {
+     size_t pos = 0;
+     while ((pos = subject.find(search, pos)) != std::string::npos) {
+-         subject.replace(pos, search.length(), replace);
+-         pos += replace.length();
++        subject.replace(pos, search.length(), replace);
++        pos += replace.length();
+     }
+ };
+ 
+-bool IsStringBoolPositive(const std::string &value)
++bool IsStringBoolPositive(const std::string& value)
+ {
+-    return (value == "+" || value == "1" || icompare_str(value, "on")  || icompare_str(value, "true") || icompare_str(value, "yes") || icompare_str(value, "y"));
++    return (value == "+" || value == "1" || icompare_str(value, "on") || icompare_str(value, "true") || icompare_str(value, "yes") || icompare_str(value, "y"));
+ };
+ 
+-bool IsStringBoolNegative(const std::string &value)
++bool IsStringBoolNegative(const std::string& value)
+ {
+     return (value == "-" || value == "0" || icompare_str(value, "off") || icompare_str(value, "false") || icompare_str(value, "no") || icompare_str(value, "n"));
+ };
+ 
+-bool GetStringBool(const std::string &value, bool &fOut)
++bool GetStringBool(const std::string& value, bool& fOut)
+ {
+     if (IsStringBoolPositive(value)) {
+         fOut = true;
+@@ -80,41 +79,38 @@ bool GetStringBool(const std::string &value, bool &fOut)
+     return false;
+ };
+ 
+-bool IsStrOnlyDigits(const std::string &s)
++bool IsStrOnlyDigits(const std::string& s)
+ {
+     return s.find_first_not_of("0123456789") == std::string::npos;
+ };
+ 
+ std::string BytesReadable(uint64_t nBytes)
+ {
+-    if (nBytes >= 1024ll*1024ll*1024ll*1024ll)
+-        return strprintf("%.2f TB", nBytes/1024.0/1024.0/1024.0/1024.0);
+-    if (nBytes >= 1024*1024*1024)
+-        return strprintf("%.2f GB", nBytes/1024.0/1024.0/1024.0);
+-    if (nBytes >= 1024*1024)
+-        return strprintf("%.2f MB", nBytes/1024.0/1024.0);
++    if (nBytes >= 1024ll * 1024ll * 1024ll * 1024ll)
++        return strprintf("%.2f TB", nBytes / 1024.0 / 1024.0 / 1024.0 / 1024.0);
++    if (nBytes >= 1024 * 1024 * 1024)
++        return strprintf("%.2f GB", nBytes / 1024.0 / 1024.0 / 1024.0);
++    if (nBytes >= 1024 * 1024)
++        return strprintf("%.2f MB", nBytes / 1024.0 / 1024.0);
+     if (nBytes >= 1024)
+-        return strprintf("%.2f KB", nBytes/1024.0);
++        return strprintf("%.2f KB", nBytes / 1024.0);
+ 
+     return strprintf("%d B", nBytes);
+ };
+ 
+-bool stringsMatchI(const std::string &sString, const std::string &sFind, int type)
++bool stringsMatchI(const std::string& sString, const std::string& sFind, int type)
+ {
+     // case insensitive
+ 
+     switch (type) {
+-        case 0: // full match
+-            return sString.length() == sFind.length()
+-                && std::equal(sFind.begin(), sFind.end(), sString.begin(), icompare_pred);
+-        case 1: // startswith
+-            return sString.length() >= sFind.length()
+-                && std::equal(sFind.begin(), sFind.end(), sString.begin(), icompare_pred);
+-        case 2: // endswith
+-            return sString.length() >= sFind.length()
+-                && std::equal(sFind.begin(), sFind.end(), sString.begin(), icompare_pred);
+-        case 3: // contains
+-            return std::search(sString.begin(), sString.end(), sFind.begin(), sFind.end(), icompare_pred) != sString.end();
++    case 0: // full match
++        return sString.length() == sFind.length() && std::equal(sFind.begin(), sFind.end(), sString.begin(), icompare_pred);
++    case 1: // startswith
++        return sString.length() >= sFind.length() && std::equal(sFind.begin(), sFind.end(), sString.begin(), icompare_pred);
++    case 2: // endswith
++        return sString.length() >= sFind.length() && std::equal(sFind.begin(), sFind.end(), sString.begin(), icompare_pred);
++    case 3: // contains
++        return std::search(sString.begin(), sString.end(), sFind.begin(), sFind.end(), icompare_pred) != sString.end();
+     }
+ 
+     return 0; // unknown type
+@@ -125,7 +121,7 @@ std::string StripQuotes(std::string s)
+     return TrimQuotes(s);
+ };
+ 
+-std::string &TrimQuotes(std::string &s)
++std::string& TrimQuotes(std::string& s)
+ {
+     if (s.size() < 1)
+         return s;
+@@ -135,21 +131,21 @@ std::string &TrimQuotes(std::string &s)
+     size_t n = s.size();
+     if (n < 1)
+         return s;
+-    if (n > 1 && s[n-2] == '\\') // don't strip \"
++    if (n > 1 && s[n - 2] == '\\') // don't strip \"
+         return s;
+     if (s.back() == '"')
+         s.erase(n - 1);
+     return s;
+ };
+ 
+-std::string &TrimWhitespace(std::string &s)
++std::string& TrimWhitespace(std::string& s)
+ {
+     LTrimWhitespace(s);
+     RTrimWhitespace(s);
+     return s;
+ };
+ 
+-std::string &LTrimWhitespace(std::string &s)
++std::string& LTrimWhitespace(std::string& s)
+ {
+     std::string::iterator i;
+     for (i = s.begin(); i != s.end(); ++i)
+@@ -160,7 +156,7 @@ std::string &LTrimWhitespace(std::string &s)
+     return s;
+ };
+ 
+-std::string &RTrimWhitespace(std::string &s)
++std::string& RTrimWhitespace(std::string& s)
+ {
+     std::string::reverse_iterator i;
+     for (i = s.rbegin(); i != s.rend(); ++i)
+@@ -171,7 +167,7 @@ std::string &RTrimWhitespace(std::string &s)
+     return s;
+ };
+ 
+-bool endsWith(const std::string &str, const std::string &suffix)
++bool endsWith(const std::string& str, const std::string& suffix)
+ {
+     return str.size() >= suffix.size() &&
+            str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0;
+diff --git a/src/util/string.h b/src/util/string.h
+index 734995f36..c017c861e 100644
+--- a/src/util/string.h
++++ b/src/util/string.h
+@@ -14,6 +14,7 @@
+ #include <sstream>
+ #include <string>
+ #include <vector>
++#include <cstdint>
+ 
+ NODISCARD inline std::string TrimString(const std::string& str, const std::string& pattern = " \f\n\r\t\v")
+ {

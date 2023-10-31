@@ -74,6 +74,7 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}"/0000-dont-track-during-verifydb.patch
+	"${FILESDIR}"/0001-gcc-13-include-missing.patch
 )
 
 RESTRICT="!test? ( test )"
