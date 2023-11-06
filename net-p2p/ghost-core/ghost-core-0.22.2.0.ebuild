@@ -20,7 +20,7 @@ fi
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="+asm +qrcode +dbus +wallet +hardened +gui +daemon +utils bench test upnp zeromq man"
+IUSE="+asm +qrcode +dbus +wallet +hardened +gui +daemon +utils +zeromq bench test upnp man"
 REQUIRED_USE="
 	wallet? (
 		|| ( gui daemon )
