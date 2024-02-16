@@ -1,0 +1,19 @@
+# This file is deprecated as per GLEP 56 in favor of metadata.xml. Please add
+# your descriptions to your package's metadata.xml ONLY.
+# * generated automatically using egencache *
+
+net-p2p/ghost-core:asm - Use assembly routines for compiler optimisation.
+net-p2p/ghost-core:bench - Build executables for benchmarks.
+net-p2p/ghost-core:daemon - Build daemon: ghostd.
+net-p2p/ghost-core:dbus - Enable D-Bus integration.
+net-p2p/ghost-core:gui - Build GUI: ghost-qt.
+net-p2p/ghost-core:hardened - Make hardened binaries for enhanced security.
+net-p2p/ghost-core:man - Install manuals.
+net-p2p/ghost-core:qrcode - Add support for generating QR-codes.
+net-p2p/ghost-core:test - Build executables for tests.
+net-p2p/ghost-core:upnp - Enable UPnP for firewall-jumping.
+net-p2p/ghost-core:utils - Build utils: ghost-cli, ghost-tx, ghost-wallet.
+net-p2p/ghost-core:wallet - Add support for wallet. Only GUI console will be built without this flag.
+net-p2p/ghost-core:zeromq - Allows generating ZMQ notifications.
+net-p2p/ghost-electrum:qrcode - Add support for generating QR-codes.
+net-p2p/ghost-electrum:test - Enable tests.
